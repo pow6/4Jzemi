@@ -9,7 +9,7 @@ public class Server {
     public static void main(String[] args) {
         try {
             ServerSocket server = new ServerSocket();
-            server.bind(new InetSocketAddress(4000)); // ポート4000で待ち受ける
+            server.bind(new InetSocketAddress(5000)); // ポート4000で待ち受ける
             // 無限ループで待ち受けを続ける
             while (true) {
                 Socket socket = server.accept();  // 接続を受け付け

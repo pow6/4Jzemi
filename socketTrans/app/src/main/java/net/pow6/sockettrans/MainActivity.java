@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             protected String doInBackground(Void... voids){
                 try{
-                    Socket socket = new Socket("10.0.33.13",4000);
+                    Socket socket = new Socket("127.0.0.1", 50007);
                     OutputStream os = socket.getOutputStream();
 
                     BufferedWriter bufwriter = new BufferedWriter(new OutputStreamWriter(os));

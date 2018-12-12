@@ -9,14 +9,14 @@ public class Server {
     public static void main(String[] args) {
         try {
             ServerSocket server = new ServerSocket();
-            server.bind(new InetSocketAddress(4000)); // ãƒãƒ¼ãƒˆ4000ã§å¾…ã¡å—ã‘ã‚‹
-            // ç„¡é™ãƒ«ãƒ¼ãƒ—ã§å¾…ã¡å—ã‘ã‚’ç¶šã‘ã‚‹
+            server.bind(new InetSocketAddress(4000)); // ƒ|[ƒg4000‚Å‘Ò‚¿ó‚¯‚é
+            // –³ŒÀƒ‹[ƒv‚Å‘Ò‚¿ó‚¯‚ğ‘±‚¯‚é
             while (true) {
-                Socket socket = server.accept();  // æ¥ç¶šã‚’å—ã‘ä»˜ã‘
+                Socket socket = server.accept();  // Ú‘±‚ğó‚¯•t‚¯
                 BufferedReader reader = new BufferedReader(
                         new InputStreamReader(socket.getInputStream()));
                 String line;
-                // å—ä¿¡ã—ãŸæœ¬æ–‡ã‚’æ¨™æº–å‡ºåŠ›ã«è¡¨ç¤ºã™ã‚‹
+                // óM‚µ‚½–{•¶‚ğ•W€o—Í‚É•\¦‚·‚é
                 while ((line = reader.readLine()) != null) {
                     System.out.println(line);
                 }

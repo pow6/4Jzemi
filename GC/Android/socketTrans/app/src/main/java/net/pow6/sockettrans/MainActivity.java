@@ -2,17 +2,21 @@ package net.pow6.sockettrans;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
+import android.preference.EditTextPreference;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+import android.widget.TextView;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -29,6 +33,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     Sensor mAccSensor;
     float mVX;
     float mVY;
+    float mVZ;
+
+    static String host;
+    static int port;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -53,6 +61,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             Sensor s = sensors.get(0);
             mSensorManager.registerListener(this,s,SensorManager.SENSOR_DELAY_UI);
         }
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        host = preferences.getString("ipAddress_preference","192.168.1.6");
+        port = preferences.getInt("portNumber_preference",5000);
+        ((TextView)findViewById(R.id.text_ip)).setText(host);
+        ((TextView)findViewById(R.id.text_port)).setText(String.valueOf(port));
+
     }
 
     public void connect(final String str){
@@ -61,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             protected String doInBackground(Void... voids){
                 try{
-                    Socket socket = new Socket("192.168.1.6", 5000);
+                    Socket socket = new Socket(host, port);
                     OutputStream os = socket.getOutputStream();
 
                     BufferedWriter bufwriter = new BufferedWriter(new OutputStreamWriter(os));
@@ -81,16 +95,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event){
         if(event.sensor.getType()== Sensor.TYPE_GYROSCOPE){
+            float accX = event.values[0];
+            float accY = event.values[1];
+            float accZ= event.values[2];
 
-            float y = event.values[1];
-            float x = event.values[2];
+            mVX = mVX + accX;
+            mVY = mVY + accY;
+            mVZ = mVZ + accZ;
 
-            mVX = mVX + x;
-            mVY = mVY + y;
-
-            String str = "X:" + mVX + "\n" + "Y:" + mVY + "\n";
+            String str = "X:" + mVX + "\n" + "Y:" + mVY+ "\n" + "Z:" + mVZ + "\n";
             connect(str);
-
+            ((TextView)findViewById(R.id.text_acc)).setText(str);
         }
     }
 
@@ -112,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void surfaceChanged(SurfaceHolder holder,int format, int width,int height){
         mVX = 0;
         mVY = 0;
+        mVZ = 0;
     }
 
     @Override
@@ -126,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     //メニュー選択時の処理
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         Intent intent = new Intent(MainActivity.this,SettingActivity.class);
@@ -139,5 +154,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
 

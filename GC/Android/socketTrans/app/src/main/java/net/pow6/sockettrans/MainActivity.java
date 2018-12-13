@@ -19,6 +19,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener, SurfaceHolder.Callback {
 
+
+
     SensorManager mSensorManager;
     Sensor mAccSensor;
     float mVX;
@@ -112,4 +114,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void surfaceDestroyed(SurfaceHolder holder){
         mSensorManager.unregisterListener(this);
     }
+
 }
+

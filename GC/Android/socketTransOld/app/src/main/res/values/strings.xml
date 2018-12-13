@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">socketTrans</string>
+
+
+
+
+    <!-- オプションメニュー用 -->
+    <string name="menu_option">設定</string>
+</resources>

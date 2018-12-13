@@ -1,7 +1,6 @@
 package net.pow6.sockettrans;
 
 import android.content.Context;
-import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -9,9 +8,6 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 import java.io.BufferedWriter;
@@ -119,25 +115,5 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mSensorManager.unregisterListener(this);
     }
 
-    //オプションメニューの作成
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.custom_menu,menu);
-        return true;
-    }
-
-    //メニュー選択時の処理
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        Intent intent = new Intent(MainActivity.this,SettingActivity.class);
-        startActivity(intent);
-        //もとに戻れるようにfinish()はしない
-        switch (item.getItemId()){
-            //メニュー【設定】を押したとき
-            case R.id.item_setting:
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }
 

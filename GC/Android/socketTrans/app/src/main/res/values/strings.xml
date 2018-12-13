@@ -2,8 +2,9 @@
     <string name="app_name">socketTrans</string>
 
 
+    <!-- 右上　メニュー用 -->
+    <string name="menu_setting">設定</string>
 
-
-    <!-- オプションメニュー用 -->
-    <string name="menu_option">設定</string>
+    <!-- 設定画面用 -->
+    <string name="preference_general">一般設定</string>
 </resources>

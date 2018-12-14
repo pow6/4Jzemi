@@ -27,16 +27,14 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener, SurfaceHolder.Callback {
 
-
-
     SensorManager mSensorManager;
     Sensor mAccSensor;
     float mVX;
     float mVY;
     float mVZ;
 
-    static String host;
-    static int port;
+    String host;
+    int port;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -61,7 +59,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             Sensor s = sensors.get(0);
             mSensorManager.registerListener(this,s,SensorManager.SENSOR_DELAY_UI);
         }
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        preferenceUpdate(this);
+    }
+
+    public void preferenceUpdate(Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         host = preferences.getString("ipAddress_preference","192.168.1.6");
         port = preferences.getInt("portNumber_preference",5000);
         ((TextView)findViewById(R.id.text_ip)).setText(host);
@@ -144,12 +146,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     //メニュー選択時の処理
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        Intent intent = new Intent(MainActivity.this,SettingActivity.class);
-        startActivity(intent);
         //もとに戻れるようにfinish()はしない
         switch (item.getItemId()){
             //メニュー【設定】を押したとき
             case R.id.item_setting:
+                Intent intent = new Intent(MainActivity.this,SettingActivity.class);
+                startActivity(intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);

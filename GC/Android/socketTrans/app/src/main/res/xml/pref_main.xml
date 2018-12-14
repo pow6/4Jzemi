@@ -14,14 +14,12 @@
             android:key="ipAddress_preference"
             android:title="@string/preference_ipAddress"
             android:summary="@string/preference_ipAddressSummary"
-            android:dialogTitle="@string/preference_ipAddress"
-            android:defaultValue="192.168.1.6"/>
+            android:dialogTitle="@string/preference_ipAddress" />
         <EditTextPreference
             android:key="portNumber_preference"
             android:title="@string/preference_portNumber"
             android:summary="@string/preference_portNumberSummary"
-            android:dialogTitle="@string/preference_portNumber"
-            android:defaultValue="5000"/>
+            android:dialogTitle="@string/preference_portNumber" />
 
 
     </PreferenceCategory>

@@ -1,3 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <resources>
     <string name="app_name">CheckApp</string>
+
+    <string-array name="question">
+        <item>ガンガン行こうぜ！</item>
+        <item>慎重に！！</item>
+        <item>支援は大事だね</item>
+        <item>元気があれば何でも出来る！</item>
+    </string-array>
+
+    <string-array name="result">
+        <item>魔女タイプ</item>
+        <item>魔法少女</item>
+        <item>魔法剣士</item>
+        <item>剣士タイプ</item>
+        <item>パワータイプ</item>
+    </string-array>
+
+    <string-array name="reTest">
+        <item>とっても神秘的！！</item>
+        <item>後方支援が得意です</item>
+        <item>オールマイティ！！</item>
+        <item>スタンダードに攻撃だ！</item>
+        <item>何も気にせずごり押しだ！</item>
+    </string-array>
 </resources>

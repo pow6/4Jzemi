@@ -1,5 +1,6 @@
 package com.test.checkapp;
 
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -22,7 +23,6 @@ public class ResultActivity extends AppCompatActivity {
             "スタンダードに攻撃だ！",
             "何も気にせずごり押しだ！",
     };
-
     int[] reImg = {
             R.drawable.p0,
             R.drawable.p1,

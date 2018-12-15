@@ -22,16 +22,19 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Array;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener, SurfaceHolder.Callback {
 
     SensorManager mSensorManager;
     Sensor mAccSensor;
-    float mVX;
-    float mVY;
-    float mVZ;
+    Sensor mGyroSensor;
+
+    float[] acceleration = new float[3];
+    float[] gyroscope = new float[3];
 
     String host;
     int port;
@@ -42,7 +45,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_main);
 
         mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-        mAccSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        mAccSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mGyroSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
     }
 
     @Override
@@ -54,18 +58,27 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onResume(){
         super.onResume();
-        List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_GYROSCOPE);
-        if(sensors.size() > 0){
-            Sensor s = sensors.get(0);
-            mSensorManager.registerListener(this,s,SensorManager.SENSOR_DELAY_UI);
-        }
-        preferenceUpdate(this);
+        //Android 端末が 各センサに対応しているかどうかチェックする
+        //対応しているセンサをすべて実装する
+        //List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
+        //if(sensors.size() > 0){
+        //    Sensor s = sensors.get(0);
+        //    mSensorManager.registerListener(this,s,SensorManager.SENSOR_DELAY_UI);
+        //}
+
+        //センサが対応していない場合の例外処理を入れようと思ったが、めんどいので後回し
+        mSensorManager.registerListener(this,mAccSensor,SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this,mGyroSensor,SensorManager.SENSOR_DELAY_GAME);
+        preferenceUpdate();
+
     }
 
-    public void preferenceUpdate(Context context){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-        host = preferences.getString("ipAddress_preference","192.168.1.6");
-        port = preferences.getInt("portNumber_preference",5000);
+    public void preferenceUpdate(){
+        //SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //host = preferences.getString("ipAddress_preference","192.168.1.6");
+        //port = preferences.getInt("portNumber_preference",5000);
+        host = "192.168.1.6";
+        port = 5000;
         ((TextView)findViewById(R.id.text_ip)).setText(host);
         ((TextView)findViewById(R.id.text_port)).setText(String.valueOf(port));
 
@@ -96,19 +109,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event){
-        if(event.sensor.getType()== Sensor.TYPE_GYROSCOPE){
-            float accX = event.values[0];
-            float accY = event.values[1];
-            float accZ= event.values[2];
-
-            mVX = mVX + accX;
-            mVY = mVY + accY;
-            mVZ = mVZ + accZ;
-
-            String str = "X:" + mVX + "\n" + "Y:" + mVY+ "\n" + "Z:" + mVZ + "\n";
-            connect(str);
-            ((TextView)findViewById(R.id.text_acc)).setText(str);
+        switch(event.sensor.getType()){
+            case Sensor.TYPE_ACCELEROMETER:
+                for(int i=0;i<3;i++){
+                    acceleration[i] = event.values[i];
+                }
+               break;
+            case Sensor.TYPE_GYROSCOPE:
+                for(int i=0;i<3;i++){
+                    gyroscope[i] += event.values[i];
+                }
+                break;
         }
+        String str = "X:" + acceleration[0] + "\n" + "Y:" + acceleration[1]+ "\n" + "Z:" + acceleration[2] + "\n"
+                + "X:"+ gyroscope[0] + "\nY:" + gyroscope[1] + "\nZ:" + gyroscope[2] + "\n";
+        connect(str);
+        ((TextView)findViewById(R.id.text_acc)).setText(str);
+
     }
 
     @Override
@@ -121,15 +138,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         registerSensor();
     }
 
+    //センサーマネージャーを登録する
     public void registerSensor(){
         mSensorManager.registerListener(this,mAccSensor,SensorManager.SENSOR_DELAY_GAME);
+
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder,int format, int width,int height){
-        mVX = 0;
-        mVY = 0;
-        mVZ = 0;
+        Arrays.fill(acceleration,0);
+        Arrays.fill(gyroscope,0);
     }
 
     @Override

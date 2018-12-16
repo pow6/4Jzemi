@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+import android.view.View;
 import android.widget.TextView;
 
 import java.io.BufferedWriter;
@@ -24,20 +25,26 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Array;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener, SurfaceHolder.Callback {
 
+
+    //センサ用
     SensorManager mSensorManager;
     Sensor mAccSensor;
     Sensor mGyroSensor;
-
     float[] acceleration = new float[3];
     float[] gyroscope = new float[3];
-
+    //socket通信用
     String host;
     int port;
+
+    //移動量用
+    double theta;    //角度
+    double dist;        //移動量の大きさ
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -71,6 +78,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mSensorManager.registerListener(this,mGyroSensor,SensorManager.SENSOR_DELAY_GAME);
         preferenceUpdate();
 
+    }
+
+    public void onClickReset(View v){
+        Arrays.fill(acceleration,0);
+        Arrays.fill(gyroscope,0);
+        mSensorManager.registerListener(this,mAccSensor,SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this,mGyroSensor,SensorManager.SENSOR_DELAY_GAME);
+        preferenceUpdate();
     }
 
     public void preferenceUpdate(){
@@ -121,11 +136,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
                 break;
         }
+        calcMovements();
+        String move = "theta:" + (int)theta + "\n" + "dist:" + (int)dist + "\n";
         String str = "X:" + acceleration[0] + "\n" + "Y:" + acceleration[1]+ "\n" + "Z:" + acceleration[2] + "\n"
-                + "X:"+ gyroscope[0] + "\nY:" + gyroscope[1] + "\nZ:" + gyroscope[2] + "\n";
-        connect(str);
+                + "X:"+ gyroscope[0] + "\nY:" + gyroscope[1] + "\nZ:" + gyroscope[2] + "\n"
+                +"\n\n"
+                + move;
+        connect(move);
         ((TextView)findViewById(R.id.text_acc)).setText(str);
 
+    }
+
+    //傾きの方向（角度）と，傾きの大きさを計算する
+    public void calcMovements(){
+            double gyroX = gyroscope[0] * (-1);
+            double gyroZ = gyroscope[2] * (-1);
+            theta = Math.toDegrees(Math.atan(gyroZ/gyroX));
+            dist = Math.sqrt(Math.pow(gyroX,2) + Math.pow(gyroZ,2));
     }
 
     @Override
@@ -141,7 +168,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     //センサーマネージャーを登録する
     public void registerSensor(){
         mSensorManager.registerListener(this,mAccSensor,SensorManager.SENSOR_DELAY_GAME);
-
     }
 
     @Override

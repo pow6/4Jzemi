@@ -44,31 +44,34 @@ namespace GCreceiver
             System.IO.MemoryStream ms = new System.IO.MemoryStream();
             byte[] resBytes = new byte[256];
             int resSize = 0;
-            do
+
+            string resMsg;
+            while (true)
             {
-
-                //データの一部を受信する
-                resSize = ns.Read(resBytes, 0, resBytes.Length);
-                //Readが0を返した時はクライアントが切断したと判断
-                if (resSize == 0)
+                do
                 {
-                    disconnected = true;
-                    Console.WriteLine("クライアントが切断しました。");
-                    break;
-                }
-                //受信したデータを蓄積する
-                ms.Write(resBytes, 0, resSize);
-                //まだ読み取れるデータがあるか、データの最後が\nでない時は、
-                // 受信を続ける
-            } while (ns.DataAvailable || resBytes[resSize - 1] != '1');
-            //受信したデータを文字列に変換
-            string resMsg = enc.GetString(ms.GetBuffer(), 0, (int)ms.Length);
-            ms.Close();
-            //末尾の\nを削除
-            resMsg = resMsg.TrimEnd('\n');
-            Console.WriteLine(resMsg);
-
+                    //データの一部を受信する
+                    resSize = ns.Read(resBytes, 0, resBytes.Length);
+                    //Readが0を返した時(ソケットが閉じられている場合)はクライアントが切断したと判断
+                    if (resSize == 0)
+                    {
+                        disconnected = true;
+                        Console.WriteLine("クライアントが切断しました。");
+                        break;
+                    }
+                    //受信したデータを蓄積する
+                    ms.Write(resBytes, 0, resSize);
+                    //まだ読み取れるデータがあるか、データの最後が\nでない時は、
+                    // 受信を続ける
+                } while (ns.DataAvailable || resBytes[resSize - 1] != '1');
+                //受信したデータを文字列に変換
+                resMsg = enc.GetString(ms.GetBuffer(), 0, (int)ms.Length);
+                //末尾の\nを削除
+                resMsg = resMsg.TrimEnd('\n');
+                Console.WriteLine(resMsg);
+            }
             //閉じる
+            ms.Close();
             ns.Close();
             client.Close();
             Console.WriteLine("クライアントとの接続を閉じました。");

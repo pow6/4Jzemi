@@ -38,6 +38,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     Sensor mGyroSensor;
     float[] acceleration = new float[3];
     float[] gyroscope = new float[3];
+    //センサ補正用
+    static final double MOVE_SENSIBILITY=100.0;
+    static final double MOVE_CORRECTION=2.0;
+
+
     //socket通信用
     String host;
     int port;
@@ -45,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     //移動量用
     double theta;    //角度
     double dist;        //移動量の大きさ
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -88,6 +94,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         preferenceUpdate();
     }
 
+    public void onClickA(View v){
+        String send;
+        send = "s\n";
+        connect(send);
+    }
+
     public void preferenceUpdate(){
         //SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         //host = preferences.getString("ipAddress_preference","192.168.1.6");
@@ -96,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         port = 5000;
         ((TextView)findViewById(R.id.text_ip)).setText(host);
         ((TextView)findViewById(R.id.text_port)).setText(String.valueOf(port));
-
     }
 
     public void connect(final String str){
@@ -153,6 +164,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             double gyroZ = gyroscope[2] * (-1);
             theta = Math.toDegrees(Math.atan(gyroZ/gyroX));
             dist = Math.sqrt(Math.pow(gyroX,2) + Math.pow(gyroZ,2));
+
+            //dist の値が小さい場合、thetaの値が荒ぶるので、調整をする
+            if(dist < MOVE_CORRECTION) {
+                theta = 0;
+            }
     }
 
     @Override

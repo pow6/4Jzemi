@@ -9,7 +9,7 @@ using System.Windows;
 namespace GCreceiver
 {
 
-    class mouseMove
+    class mouseMove : socket
     {
         double height;
         double width;
@@ -36,12 +36,15 @@ namespace GCreceiver
             SetCursorPos(120, 120);
         }
 
-        public void moveAsController(double theta,double dist)
+        public static void moveAsController()
         {
-            int horizon = (int)(Math.Cos(theta) * dist);
-            int vertical = (int)(Math.Sin(theta) * dist);
+            
+            int horizon = (int)(Math.Cos(socket.getTheta()) * socket.getDist());
+            int vertical = (int)(Math.Sin(socket.getTheta()) * socket.getDist());
 
             SetCursorPos(horizon, vertical);
         }
+
+        
     }
 }

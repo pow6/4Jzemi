@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     public void onClickA(View v){
         String send;
-        send = "s\n";
+        send = "***********\n";
         connect(send);
     }
 
@@ -123,8 +123,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                     bufwriter.write(str);
                     bufwriter.flush();
-                    bufwriter.close();
-                    socket.close();
+                    //bufwriter.close();
+                    //socket.close();
                 }catch(IOException e){
                     e.printStackTrace();
                 }
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 break;
         }
         calcMovements();
-        String move = "theta:" + (int)theta + "\n" + "dist:" + (int)dist + "\n";
+        String move = "theta:" + theta + "\n" + "dist:" + dist + "\n";
         String str = "X:" + acceleration[0] + "\n" + "Y:" + acceleration[1]+ "\n" + "Z:" + acceleration[2] + "\n"
                 + "X:"+ gyroscope[0] + "\nY:" + gyroscope[1] + "\nZ:" + gyroscope[2] + "\n"
                 +"\n\n"

@@ -57,8 +57,12 @@ namespace GCreceiver
         }
         private void startSocket_ButtonClick(object sender, RoutedEventArgs e)
         {
+            int flag;
             Console.WriteLine("Start Socket\n");
-            socket.socketCom();
+            do {
+                flag=socket.socketCom();
+                mouseMove.moveAsController();
+            } while(flag==1);
         }
         /*****Functions for Button Event[here]******/
 

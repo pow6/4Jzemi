@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,10 @@ namespace GCreceiver
 {
     class socket
     {
-        public static void socketCom()
+        static double thetaFromAndroid;
+        static double distFromAndroid;
+
+        public static int socketCom()
         {
             //ListenするIPの指定
             string IP_String = "0.0.0.0";
@@ -45,31 +49,45 @@ namespace GCreceiver
             byte[] resBytes = new byte[256];
             int resSize = 0;
 
-            string resMsg;
-            while (true)
+            StreamReader sr = new StreamReader(ns, enc);
+            string resMsg = String.Empty;
+            do
             {
-                do
-                {
-                    //データの一部を受信する
-                    resSize = ns.Read(resBytes, 0, resBytes.Length);
-                    //Readが0を返した時(ソケットが閉じられている場合)はクライアントが切断したと判断
-                    if (resSize == 0)
-                    {
-                        disconnected = true;
-                        Console.WriteLine("クライアントが切断しました。");
-                        break;
-                    }
-                    //受信したデータを蓄積する
-                    ms.Write(resBytes, 0, resSize);
-                    //まだ読み取れるデータがあるか、データの最後が\nでない時は、
-                    // 受信を続ける
-                } while (ns.DataAvailable || resBytes[resSize - 1] != '1');
-                //受信したデータを文字列に変換
-                resMsg = enc.GetString(ms.GetBuffer(), 0, (int)ms.Length);
-                //末尾の\nを削除
-                resMsg = resMsg.TrimEnd('\n');
+                resMsg = sr.ReadLine();
+                if (resMsg == null) break;
                 Console.WriteLine(resMsg);
-            }
+
+
+                thetaFromAndroid = 100;
+                distFromAndroid = 10;
+                /*
+                //データの一部を受信する
+                resSize = ns.Read(resBytes, 0, resBytes.Length);
+                //Readが0を返した時(ソケットが閉じられている場合)はクライアントが切断したと判断
+                if (resSize == 0)
+                {
+                    disconnected = true;
+                    Console.WriteLine("クライアントが切断しました。");
+                    break;
+                }
+                
+
+
+                //受信したデータを蓄積する
+                ms.Write(resBytes, 0, resSize);
+
+                //まだ読み取れるデータがあるか、データの最後が\nでない時は、
+                // 受信を続ける
+            } while (ns.DataAvailable || resBytes[resSize - 1] != '\n');
+            */
+            } while (true);
+
+
+            //受信したデータを文字列に変換
+            resMsg = enc.GetString(ms.GetBuffer(), 0, (int)ms.Length);
+            //末尾の\nを削除
+            resMsg = resMsg.TrimEnd('\n');
+            Console.WriteLine(resMsg);
             //閉じる
             ms.Close();
             ns.Close();
@@ -81,8 +99,18 @@ namespace GCreceiver
             Console.WriteLine("Listenerを閉じました。");
 
             Console.ReadLine();
+            return 1;   //規定文字が来たら，-1などを返すようにあとで変える
         }
 
+
+        public static double getTheta()
+        {
+            return socket.thetaFromAndroid;
+        }
+        public static double getDist()
+        {
+            return socket.distFromAndroid;
+        }
 
     }
 }

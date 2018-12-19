@@ -160,9 +160,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     //傾きの方向（角度）と，傾きの大きさを計算する
     public void calcMovements(){
-            double gyroX = gyroscope[0] * (-1);
-            double gyroZ = gyroscope[2] * (-1);
-            theta = Math.atan(gyroZ/gyroX);
+            double gyroX = gyroscope[0];
+            double gyroZ = gyroscope[2];
+            theta = Math.atan2(gyroZ,gyroX);        //atan2 は -πから+πを返す
             dist = Math.sqrt(Math.pow(gyroX,2) + Math.pow(gyroZ,2));
 
             //dist の値が小さい場合、thetaの値が荒ぶるので、調整をする

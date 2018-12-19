@@ -9,8 +9,8 @@ namespace GCreceiver
 {
     class socket
     {
-        static double thetaFromAndroid;
-        static double distFromAndroid;
+        static double thetaFromAndroid=100;
+        static double distFromAndroid=10;
 
         public static int socketCom()
         {
@@ -51,15 +51,31 @@ namespace GCreceiver
 
             StreamReader sr = new StreamReader(ns, enc);
             string resMsg = String.Empty;
+            string[] values = new string[3];
             do
             {
                 resMsg = sr.ReadLine();
                 if (resMsg == null) break;
                 Console.WriteLine(resMsg);
 
+                values = resMsg.Split(' ');
+                switch (values[0])
+                {
+                    case "theta:":
+                        thetaFromAndroid = double.Parse(values[1]);
+                        break;
+                    case "dist:":
+                        distFromAndroid = double.Parse(values[1]);
+                        break;
+                    default:
+                        break;
+                }
+                Console.WriteLine(values[0]);
+                Console.WriteLine(values[1]);
 
-                thetaFromAndroid = 100;
-                distFromAndroid = 10;
+
+                //thetaFromAndroid = 100;
+                //distFromAndroid = 10;
                 /*
                 //データの一部を受信する
                 resSize = ns.Read(resBytes, 0, resBytes.Length);

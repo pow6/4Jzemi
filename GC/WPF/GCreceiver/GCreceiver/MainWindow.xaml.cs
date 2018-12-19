@@ -50,14 +50,17 @@ namespace GCreceiver
         {
             readLastSettings();
         }
+
         private void saveSettings_ButtonClick(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default["Sensibility"] = this.valueOfSensibility;
             Properties.Settings.Default.Save();
         }
+
         private void startSocket_ButtonClick(object sender, RoutedEventArgs e)
         {
             int flag;
+            new mouseMove();
             Console.WriteLine("Start Socket\n");
             do {
                 flag=socket.socketCom();

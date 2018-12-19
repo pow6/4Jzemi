@@ -11,11 +11,10 @@ namespace GCreceiver
 
     class mouseMove : socket
     {
-        double height;
-        double width;
-        int heightCenter;
-        int widthCenter;
-
+        static double height;
+        static double width;
+        static int heightCenter;
+        static int widthCenter;
 
         public mouseMove()
         {
@@ -23,6 +22,7 @@ namespace GCreceiver
             width = SystemParameters.PrimaryScreenWidth;
             heightCenter = (int)height / 2;
             widthCenter = (int)width / 2;
+            Console.WriteLine(height + "aaaaa" +width);
         }
 
         [DllImport("USER32.dll", CallingConvention = CallingConvention.StdCall)]
@@ -41,8 +41,12 @@ namespace GCreceiver
             
             int horizon = (int)(Math.Cos(socket.getTheta()) * socket.getDist());
             int vertical = (int)(Math.Sin(socket.getTheta()) * socket.getDist());
+            Console.WriteLine("moveAsController called");
+            Console.WriteLine(socket.getTheta() + "***" + socket.getDist());
 
-            SetCursorPos(horizon, vertical);
+            Console.WriteLine(horizon +"***"+vertical);
+
+            SetCursorPos(heightCenter - horizon, widthCenter - vertical);
         }
 
         

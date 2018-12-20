@@ -82,8 +82,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //センサが対応していない場合の例外処理を入れようと思ったが、めんどいので後回し
         mSensorManager.registerListener(this,mAccSensor,SensorManager.SENSOR_DELAY_GAME);
         mSensorManager.registerListener(this,mGyroSensor,SensorManager.SENSOR_DELAY_GAME);
-        preferenceUpdate();
-
     }
 
     public void onClickReset(View v){
@@ -91,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         Arrays.fill(gyroscope,0);
         mSensorManager.registerListener(this,mAccSensor,SensorManager.SENSOR_DELAY_GAME);
         mSensorManager.registerListener(this,mGyroSensor,SensorManager.SENSOR_DELAY_GAME);
-        preferenceUpdate();
     }
 
     public void onClickA(View v){
@@ -100,15 +97,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         connect(send);
     }
 
-    public void preferenceUpdate(){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        host = preferences.getString("ipAddress_preference","192.168.1.6");
-        port = Integer.parseInt(preferences.getString("portNumber_preference","5000"));
-        //host = "192.168.1.6";
-        //port = 5000;
-        ((TextView)findViewById(R.id.text_ip)).setText(host);
-        ((TextView)findViewById(R.id.text_port)).setText(String.valueOf(port));
-    }
 
     public void connect(final String str){
         new AsyncTask<Void, Void, String>(){
@@ -219,13 +207,26 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 Intent intent = new Intent(MainActivity.this,SettingActivity.class);
                 startActivity(intent);
                 return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         //preference が変更されたときに呼ばれる
+        switch (key){
+            case "ipAddress_preference":
+                host = sharedPreferences.getString("ipAddress_preference","192.168.1.6");
+                ((TextView)findViewById(R.id.text_ip)).setText(host);
+                break;
+            case "portNumber_preferences":
+                port = Integer.parseInt(sharedPreferences.getString("portNumber_preference","5000"));
+                ((TextView)findViewById(R.id.text_port)).setText(String.valueOf(port));
+                break;
+            default:
+                break;
+        }
 
     }
 }

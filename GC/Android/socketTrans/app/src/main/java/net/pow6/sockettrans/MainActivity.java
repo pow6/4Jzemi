@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener, SurfaceHolder.Callback {
+public class MainActivity extends AppCompatActivity implements SensorEventListener, SurfaceHolder.Callback , SharedPreferences.OnSharedPreferenceChangeListener {
 
 
     //センサ用
@@ -101,11 +101,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void preferenceUpdate(){
-        //SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        //host = preferences.getString("ipAddress_preference","192.168.1.6");
-        //port = preferences.getInt("portNumber_preference",5000);
-        host = "192.168.1.6";
-        port = 5000;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        host = preferences.getString("ipAddress_preference","192.168.1.6");
+        port = Integer.parseInt(preferences.getString("portNumber_preference","5000"));
+        //host = "192.168.1.6";
+        //port = 5000;
         ((TextView)findViewById(R.id.text_ip)).setText(host);
         ((TextView)findViewById(R.id.text_port)).setText(String.valueOf(port));
     }
@@ -158,17 +158,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
-    //傾きの方向（角度）と，傾きの大きさを計算する
+    /*傾きの方向（角度）と，傾きの大きさを計算する
+     *横軸：gyroscope の X軸を利用
+     *縦軸：acceleration の Y軸を利用
+     *値の変化量が異なるので、調整する必要がある
+     *値の最大値をpreference で設定可能にし、最大値以上の値は最大値に丸める。
+     * preference  で設定する値は、レベル単位にする
+     */
     public void calcMovements(){
-            double gyroX = gyroscope[0];
-            double gyroZ = gyroscope[2];
-            theta = Math.atan2(gyroZ,gyroX);        //atan2 は -πから+πを返す
-            dist = Math.sqrt(Math.pow(gyroX,2) + Math.pow(gyroZ,2));
+        double gyroX = gyroscope[0];
+        double gyroZ = gyroscope[2];
+        theta = Math.atan2(gyroZ,gyroX);        //atan2 は -πから+πを返す
+        dist = Math.sqrt(Math.pow(gyroX,2) + Math.pow(gyroZ,2));
 
-            //dist の値が小さい場合、thetaの値が荒ぶるので、調整をする
-            if(dist < MOVE_CORRECTION) {
-                theta = 0;
-            }
+        //dist の値が小さい場合、thetaの値が荒ぶるので、調整をする
+        if(dist < MOVE_CORRECTION) {
+            theta = 0;
+        }
     }
 
     @Override
@@ -217,5 +223,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        //preference が変更されたときに呼ばれる
+
+    }
 }
 

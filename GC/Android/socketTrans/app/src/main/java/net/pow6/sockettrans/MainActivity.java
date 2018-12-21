@@ -178,10 +178,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             theta = 0.0d;
         }
 
-        theta = ((int)((theta + 0.5d) * thetaEncodingRate)) / thetaEncodingRate;
-        dist = ((int)((dist + 0.5d) * distEncodingRate)) / distEncodingRate;
-
-            }
+        theta = ((int)(theta + 0.5d)) / thetaEncodingRate;
+        dist = ((int)(dist + 0.5d)) / distEncodingRate;
+    }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy){

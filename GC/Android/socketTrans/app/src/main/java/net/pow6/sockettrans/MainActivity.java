@@ -164,8 +164,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      *
      */
     public void calcMovements(){
-        double gyroX = gyroscope[0];
-        double gyroZ = gyroscope[2];
+        double gyroX = gyroscope[0]/maxHorizon * (-1);
+        double gyroZ = gyroscope[2]/maxVertical;
+        if(gyroX>1.0)gyroX = 1.0;
+        if(gyroZ>1.0)gyroZ = 1.0;
+
         theta = Math.atan2(gyroZ,gyroX);        //atan2 は -πから+πを返す
         dist = Math.sqrt(Math.pow(gyroX,2) + Math.pow(gyroZ,2));
 
@@ -211,10 +214,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         //もとに戻れるようにfinish()はしない
+        Intent intent;
         switch (item.getItemId()){
             //メニュー【設定】を押したとき
             case R.id.item_setting:
-                Intent intent = new Intent(MainActivity.this,SettingActivity.class);
+                intent = new Intent(MainActivity.this,SettingActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.item_info:
+                intent = new Intent(MainActivity.this,InfoActivity.class);
                 startActivity(intent);
                 return true;
             default:

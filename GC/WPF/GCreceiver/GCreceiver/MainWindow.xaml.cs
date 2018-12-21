@@ -65,6 +65,7 @@ namespace GCreceiver
             do {
                 flag=socket.socketCom();
                 mouseMove.moveAsController();
+                //mouseMove.moveTest();
             } while(flag==1);
         }
         /*****Functions for Button Event[here]******/

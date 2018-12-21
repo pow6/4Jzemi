@@ -33,22 +33,26 @@ namespace GCreceiver
 
         public static void moveTest()
         {
-            SetCursorPos(120, 120);
+            SetCursorPos(widthCenter, heightCenter);
         }
 
         public static void moveAsController()
         {
             
-            int horizon = (int)(Math.Cos(socket.getTheta()) * socket.getDist());
-            int vertical = (int)(Math.Sin(socket.getTheta()) * socket.getDist());
+            int horizon = (int)((Math.Cos(socket.getTheta()) * socket.getDist())*1000);
+            int vertical = (int)((Math.Sin(socket.getTheta()) * socket.getDist())*1000);
             Console.WriteLine("moveAsController called");
-            Console.WriteLine(socket.getTheta() + "***" + socket.getDist());
+            Console.WriteLine("theta:"+socket.getTheta() + " dist:" + socket.getDist());
 
-            Console.WriteLine(horizon +"***"+vertical);
+            Console.WriteLine("horizon:"+horizon +"vertical:"+vertical);
 
-            SetCursorPos(heightCenter - horizon, widthCenter - vertical);
+            SetCursorPos(widthCenter + vertical, heightCenter + horizon);
         }
 
         
     }
 }
+
+
+
+

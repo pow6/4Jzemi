@@ -9,8 +9,8 @@ namespace GCreceiver
 {
     class socket
     {
-        static double thetaFromAndroid=100;
-        static double distFromAndroid=10;
+        static double thetaFromAndroid;
+        static double distFromAndroid;
 
         public static int socketCom()
         {

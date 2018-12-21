@@ -15,6 +15,7 @@ namespace GCreceiver
         static double width;
         static int heightCenter;
         static int widthCenter;
+        static const int bias = 1;
 
         public mouseMove()
         {
@@ -39,8 +40,8 @@ namespace GCreceiver
         public static void moveAsController()
         {
             
-            int horizon = (int)((Math.Cos(socket.getTheta()) * socket.getDist())*1000);
-            int vertical = (int)((Math.Sin(socket.getTheta()) * socket.getDist())*1000);
+            int horizon = (int)((Math.Cos(socket.getTheta()) * socket.getDist())*bias);
+            int vertical = (int)((Math.Sin(socket.getTheta()) * socket.getDist())*bias);
             Console.WriteLine("moveAsController called");
             Console.WriteLine("theta:"+socket.getTheta() + " dist:" + socket.getDist());
 

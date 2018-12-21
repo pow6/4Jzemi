@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener, SurfaceHolder.Callback , SharedPreferences.OnSharedPreferenceChangeListener {
+public class MainActivity extends AppCompatActivity implements SensorEventListener, SurfaceHolder.Callback , SharedPreferences.OnSharedPreferenceChangeListener{
 
 
     //センサ用
@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
     //socket通信用
-    String host;
-    int port;
+    static String host;
+    static int port;
 
     //移動量用
     double theta;    //角度

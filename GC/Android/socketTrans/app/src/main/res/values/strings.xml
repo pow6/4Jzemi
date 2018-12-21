@@ -4,16 +4,32 @@
 
     <!-- 右上　メニュー用 -->
     <string name="menu_setting">設定</string>
+    <string name="menu_info">このアプリについて</string>
 
     <!-- 設定画面用 -->
     <string name="preference_general">一般設定</string>
     <string name="preference_network">ネットワーク設定</string>
         <!-- 設定画面　内部用　一般-->
-        <string name="preference_horizonMax">横最大値</string>
-        <string name="preference_verticalMax"></string>
+        <string name="preference_thetaEncodingRate">方向感度</string>
+        <string name="preference_thetaEncodingRateSummary">theta の符号化レベル</string>
+        <string name="preference_distEncodingRate">移動量感度</string>
+        <string name="preference_distEncodingRateSummary">dist の符号化レベル</string>
+
+        <string name="preference_horizonMax">横軸最大値</string>
+        <string name="preference_horizonMaxSummary">50までの値を目安に（最終的にはレベルで）</string>
+        <string name="preference_verticalMax">縦軸最大値</string>
+        <string name="preference_verticalMaxSummary">目安は3から5（最終的にはレベルで）</string>
         <!-- 設定画面　内部用　ネットワーク-->
         <string name="preference_ipAddress">IPアドレス</string>
         <string name="preference_ipAddressSummary">接続先PCのIPアドレスを入力してください</string>
         <string name="preference_portNumber">ポート番号</string>
         <string name="preference_portNumberSummary">出力ポート番号を入力しください</string>
+
+    <!-- デフォルト設定値 -->
+    <string name="default_thetaEncodingRate">8</string>
+    <string name="default_distEncodingRate">2000</string>
+    <string name="default_horizon">50</string>
+    <string name="default_vertical">5</string>
+    <string name="default_ipAddress">192.168.1.6</string>
+    <string name="default_portNumber">5000</string>
 </resources>

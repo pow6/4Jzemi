@@ -38,10 +38,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     Sensor mGyroSensor;
     float[] acceleration = new float[3];
     float[] gyroscope = new float[3];
-    //センサ補正用
-    static final double MOVE_SENSIBILITY=100.0;
-    static final double MOVE_CORRECTION=2.0;
 
+    //センサ補正用（手振れ補正のような処理はWPF側で行う）
+    static final double MOVE_CORRECTION=0.1;    //dist がゼロに近い場合，thetaの値が荒ぶるので，その予防 (なお横縦の値はすでに0~1に量子化しているとする)
 
     //socket通信用
     static String host;
@@ -51,6 +50,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     double theta;    //角度
     double dist;        //移動量の大きさ
 
+    //移動量補正（移動量の量子化に利用）
+    //生データをmaxで割ることにより，0~1の値に量子化
+    double maxHorizon;  //横軸の最大移動量
+    double maxVertical;  //縦軸の最大移動量
+    double thetaEncodingRate;   //thetaの符号化レベル
+    double distEncodingRate;      //distの符号化レベル
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -60,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         mAccSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mGyroSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+
+        //Text view の値を更新する
+        preferenceInitialize();
     }
 
     @Override
@@ -82,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //センサが対応していない場合の例外処理を入れようと思ったが、めんどいので後回し
         mSensorManager.registerListener(this,mAccSensor,SensorManager.SENSOR_DELAY_GAME);
         mSensorManager.registerListener(this,mGyroSensor,SensorManager.SENSOR_DELAY_GAME);
+
     }
 
     public void onClickReset(View v){
@@ -151,7 +160,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      *縦軸：acceleration の Y軸を利用
      *値の変化量が異なるので、調整する必要がある
      *値の最大値をpreference で設定可能にし、最大値以上の値は最大値に丸める。
-     * preference  で設定する値は、レベル単位にする
+     * preference  で設定する値は、レベル単位にする(最終的な理想)
+     *
      */
     public void calcMovements(){
         double gyroX = gyroscope[0];
@@ -216,18 +226,41 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         //preference が変更されたときに呼ばれる
         switch (key){
-            case "ipAddress_preference":
-                host = sharedPreferences.getString("ipAddress_preference","192.168.1.6");
+            case "key_ipAddress":
+                host = sharedPreferences.getString("key_ipAddress",getString(R.string.default_ipAddress));
                 ((TextView)findViewById(R.id.text_ip)).setText(host);
                 break;
-            case "portNumber_preferences":
-                port = Integer.parseInt(sharedPreferences.getString("portNumber_preference","5000"));
+            case "key_portNumber":
+                port = Integer.parseInt(sharedPreferences.getString("key_portNumber",getString(R.string.default_portNumber)));
                 ((TextView)findViewById(R.id.text_port)).setText(String.valueOf(port));
+                break;
+            case "key_horizontal":
+                maxHorizon = Double.parseDouble(sharedPreferences.getString("key_horizontal",getString(R.string.default_horizon)));
+                break;
+            case "key_vertical":
+                maxVertical = Double.parseDouble(sharedPreferences.getString("key_vertical",getString(R.string.default_vertical)));
+                break;
+            case "key_thetaEncodingRate":
+                thetaEncodingRate = Double.parseDouble(sharedPreferences.getString("key_thetaEncodingRate",getString(R.string.default_thetaEncodingRate)));
+                break;
+            case "key_distEncodingRate":
+                distEncodingRate = Double.parseDouble(sharedPreferences.getString("key_distEncodingRate",getString(R.string.default_distEncodingRate)));
                 break;
             default:
                 break;
         }
+    }
 
+    public void preferenceInitialize(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        host = preferences.getString("key_ipAddress",getString(R.string.default_ipAddress));
+        port = Integer.parseInt(preferences.getString("key_portNumber",getString(R.string.default_portNumber)));
+        maxHorizon = Double.parseDouble(preferences.getString("key_horizontal",getString(R.string.default_horizon)));
+        maxVertical = Double.parseDouble(preferences.getString("key_vertical",getString(R.string.default_vertical)));
+        thetaEncodingRate = Double.parseDouble(preferences.getString("key_thetaEncodingRate",getString(R.string.default_thetaEncodingRate)));
+        distEncodingRate = Double.parseDouble(preferences.getString("key_distEncodingRate",getString(R.string.default_distEncodingRate)));
+        ((TextView)findViewById(R.id.text_ip)).setText(host);
+        ((TextView)findViewById(R.id.text_port)).setText(String.valueOf(port));
     }
 }
 

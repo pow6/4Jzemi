@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
     //センサ補正用（手振れ補正のような処理はWPF側で行う）
-    static final double MOVE_CORRECTION=0.1;    //dist がゼロに近い場合，thetaの値が荒ぶるので，その予防 (なお横縦の値はすでに0~1に量子化しているとする)
+    static final double MOVE_CORRECTION=0.3;    //dist がゼロに近い場合，thetaの値が荒ぶるので，その予防 (なお横縦の値はすでに0~1に量子化しているとする)
     double vertical_offset;
 
     //socket通信用
@@ -172,14 +172,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         theta = Math.atan2(accY,gyroX) * thetaEncodingRate;        //atan2 は -πから+πを返す
         dist = Math.sqrt(Math.pow(gyroX,2) + Math.pow(accY,2)) * distEncodingRate;
+        theta = ((int)(theta + 0.5d)) / thetaEncodingRate;
+        dist = ((int)(dist + 0.5d)) / distEncodingRate;
 
         //dist の値が小さい場合、thetaの値が荒ぶるので、調整をする
         if(dist < MOVE_CORRECTION) {
             theta = 0.0d;
         }
 
-        theta = ((int)(theta + 0.5d)) / thetaEncodingRate;
-        dist = ((int)(dist + 0.5d)) / distEncodingRate;
     }
 
     @Override

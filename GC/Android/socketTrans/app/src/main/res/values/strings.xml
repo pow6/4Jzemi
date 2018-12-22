@@ -26,10 +26,10 @@
         <string name="preference_portNumberSummary">出力ポート番号を入力しください</string>
 
     <!-- デフォルト設定値 -->
-    <string name="default_thetaEncodingRate">8</string>
+    <string name="default_thetaEncodingRate">4</string>
     <string name="default_distEncodingRate">2000</string>
-    <string name="default_horizon">50</string>
-    <string name="default_vertical">5</string>
+    <string name="default_horizon">30</string>
+    <string name="default_vertical">4</string>
     <string name="default_ipAddress">192.168.1.6</string>
     <string name="default_portNumber">5000</string>
 
@@ -38,3 +38,4 @@
         このアプリについての説明。使い方の解説などを入れる。WPFのリンクを張ったりする。とか
     </string>
 </resources>
+

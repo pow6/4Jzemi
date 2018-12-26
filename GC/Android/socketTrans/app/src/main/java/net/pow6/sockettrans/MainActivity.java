@@ -59,6 +59,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     double thetaEncodingRate;   //thetaの符号化レベル
     double distEncodingRate;    //distの符号化レベル
 
+    //傾き関係
+    double boundaryJudge;       //左右リーンの判定値
+    boolean leanFlag;           //現在リーンをしているかの判定
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -91,8 +95,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mSensorManager.registerListener(this,mAccSensor,SensorManager.SENSOR_DELAY_GAME);
         mSensorManager.registerListener(this,mGyroSensor,SensorManager.SENSOR_DELAY_GAME);
 
-        //Text view の値を更新する
+        //preference から読み取りを行う
         preferenceInitialize();
+        //リーンフラグを下ろす
+        leanFlag = false;
     }
 
     public void onClickReset(View v){
@@ -146,7 +152,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
                 break;
         }
-        calcMovements();
+
+        sendLean();     //リーン判定処理
+        calcMovements();    //theta dist を計算
         String move = "theta: " + theta + "\n" + "dist: " + dist + "\n";
         String str = "X:" + acceleration[0] + "\n" + "Y:" + acceleration[1]+ "\n" + "Z:" + acceleration[2] + "\n"
                 + "X:"+ gyroscope[0] + "\nY:" + gyroscope[1] + "\nZ:" + gyroscope[2] + "\n"
@@ -181,6 +189,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
 
     }
+
+    public void sendLean(){
+        double accZ = acceleration[2];
+        if(leanFlag){   //現在リーンをしている
+            if(-boundaryJudge<accZ && accZ < boundaryJudge){
+                connect("lean: clear\n");
+                leanFlag = false;
+            }
+        }else{      //現在リーンをしていない
+            if(accZ < -boundaryJudge){   //左リーン
+                connect("lean: Left\n");
+            }else if(accZ > boundaryJudge){ //右リーン
+                connect("lean: Right\n");
+            }
+            leanFlag = true;
+        }
+    }
+
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy){
@@ -257,6 +283,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             case "key_distEncodingRate":
                 distEncodingRate = Double.parseDouble(sharedPreferences.getString("key_distEncodingRate",getString(R.string.default_distEncodingRate)));
                 break;
+            case "key_boundaryJudge":
+                boundaryJudge = Double.parseDouble(sharedPreferences.getString("key_boundaryJudge",getString(R.string.default_boundaryJudge)));
             default:
                 break;
         }
@@ -270,8 +298,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         maxVertical = Double.parseDouble(preferences.getString("key_vertical",getString(R.string.default_vertical)));
         thetaEncodingRate = Double.parseDouble(preferences.getString("key_thetaEncodingRate",getString(R.string.default_thetaEncodingRate)));
         distEncodingRate = Double.parseDouble(preferences.getString("key_distEncodingRate",getString(R.string.default_distEncodingRate)));
-        ((TextView)findViewById(R.id.text_ip)).setText(host);
-        ((TextView)findViewById(R.id.text_port)).setText(String.valueOf(port));
+        boundaryJudge = Double.parseDouble(preferences.getString("key_boundaryJudge",getString(R.string.default_boundaryJudge)));
     }
 }
 

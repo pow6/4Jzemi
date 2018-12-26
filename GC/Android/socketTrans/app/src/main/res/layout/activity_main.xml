@@ -7,58 +7,28 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/text_ip"
-        android:layout_width="175dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="461dp"
-        android:layout_marginEnd="177dp"
-        android:text="hello"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
         android:id="@+id/text_acc"
         android:layout_width="175dp"
-        android:layout_height="455dp"
-        android:layout_marginBottom="2dp"
+        android:layout_height="223dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginBottom="2dp"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_ip" />
-
-    <TextView
-        android:id="@+id/text_port"
-        android:layout_width="175dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="2dp"
-        android:layout_marginEnd="4dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/text_ip"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/button_reset"
-        android:onClick="onClickReset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="428dp"
-        android:layout_marginEnd="107dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="41dp"
+        android:layout_marginEnd="107dp"
+        android:layout_marginBottom="36dp"
+        android:onClick="onClickReset"
         android:text="Reset"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/text_acc"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_ip" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button_a"
@@ -68,8 +38,8 @@
         android:layout_marginTop="27dp"
         android:layout_marginEnd="100dp"
         android:layout_marginBottom="325dp"
-        android:text="A"
         android:onClick="onClickA"
+        android:text="A"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/text_acc"
         app:layout_constraintHorizontal_bias="0.0"

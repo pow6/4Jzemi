@@ -44,6 +44,16 @@
             android:summary="@string/preference_verticalMaxSummary"
             android:dialogTitle="@string/preference_verticalMax"
             android:defaultValue="@string/default_vertical" />
+        <EditTextPreference
+            android:key="key_boundaryJudge"
+            android:hint="@string/preference_boundaryJudgeSummary"
+            android:inputType="number"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/preference_boundaryJudge"
+            android:summary="@string/preference_boundaryJudgeSummary"
+            android:dialogTitle="@string/preference_boundaryJudge"
+            android:defaultValue="@string/default_boundaryJudge"/>
 
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/preference_network">

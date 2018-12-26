@@ -68,8 +68,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mAccSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mGyroSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
-        //Text view の値を更新する
-        preferenceInitialize();
     }
 
     @Override
@@ -93,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mSensorManager.registerListener(this,mAccSensor,SensorManager.SENSOR_DELAY_GAME);
         mSensorManager.registerListener(this,mGyroSensor,SensorManager.SENSOR_DELAY_GAME);
 
+        //Text view の値を更新する
+        preferenceInitialize();
     }
 
     public void onClickReset(View v){

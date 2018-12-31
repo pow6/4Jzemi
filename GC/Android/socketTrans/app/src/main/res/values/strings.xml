@@ -43,7 +43,7 @@
     <string name="default_boundaryJudge">5</string>
     <!-- info 用文章 -->
     <string name="text_info">
-        このアプリについての説明。使い方の解説などを入れる。WPFのリンクを張ったりする。とか
+        このアプリについての説明。使い方の解説などを入れる。\nWPFのリンクを張ったりする。とか
     </string>
 </resources>
 

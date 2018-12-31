@@ -2,6 +2,11 @@
     <string name="app_name">socketTrans</string>
 
 
+    <!-- ボタン　名称用 -->
+    <string name="name_start">接続開始</string>
+    <string name="name_reset">リセット</string>
+    <string name="name_finish">終了</string>
+
     <!-- 右上　メニュー用 -->
     <string name="menu_setting">設定</string>
     <string name="menu_info">このアプリについて</string>

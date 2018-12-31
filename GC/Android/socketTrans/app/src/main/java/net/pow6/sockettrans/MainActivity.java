@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener, SurfaceHolder.Callback , SharedPreferences.OnSharedPreferenceChangeListener{
+public class MainActivity extends AppCompatActivity implements SensorEventListener, SurfaceHolder.Callback , SharedPreferences.OnSharedPreferenceChangeListener,View.OnClickListener{
 
 
     //センサ用
@@ -72,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mAccSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mGyroSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
+        findViewById(R.id.button_reset).setOnClickListener(this);
+        findViewById(R.id.button_finish).setOnClickListener(this);
     }
 
     @Override
@@ -101,17 +103,29 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         leanFlag = false;
     }
 
-    public void onClickReset(View v){
-        Arrays.fill(acceleration,0);
-        Arrays.fill(gyroscope,0);
-        mSensorManager.registerListener(this,mAccSensor,SensorManager.SENSOR_DELAY_GAME);
-        mSensorManager.registerListener(this,mGyroSensor,SensorManager.SENSOR_DELAY_GAME);
-    }
-
     public void onClickA(View v){
         String send;
         send = "***********\n";
         connect(send);
+    }
+
+    @Override
+    public void onClick(View view){
+        if(view != null){
+            switch(view.getId()){
+                case R.id.button_reset:
+                    Arrays.fill(acceleration,0);
+                    Arrays.fill(gyroscope,0);
+                    mSensorManager.registerListener(this,mAccSensor,SensorManager.SENSOR_DELAY_GAME);
+                    mSensorManager.registerListener(this,mGyroSensor,SensorManager.SENSOR_DELAY_GAME);
+                    break;
+                case R.id.button_finish:
+                    finish();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
 
@@ -265,11 +279,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         switch (key){
             case "key_ipAddress":
                 host = sharedPreferences.getString("key_ipAddress",getString(R.string.default_ipAddress));
-                ((TextView)findViewById(R.id.text_ip)).setText(host);
                 break;
             case "key_portNumber":
                 port = Integer.parseInt(sharedPreferences.getString("key_portNumber",getString(R.string.default_portNumber)));
-                ((TextView)findViewById(R.id.text_port)).setText(String.valueOf(port));
                 break;
             case "key_horizontal":
                 maxHorizon = Double.parseDouble(sharedPreferences.getString("key_horizontal",getString(R.string.default_horizon)));

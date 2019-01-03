@@ -26,13 +26,14 @@ namespace GCreceiver
 
             //Listenを開始
             listener.Start();
-            Console.WriteLine("Listenを開始しました({0}:{1})", ((System.Net.IPEndPoint)listener.LocalEndpoint).Address,((System.Net.IPEndPoint)listener.LocalEndpoint).Port);
+//            Console.WriteLine("Listenを開始しました({0}:{1})", ((System.Net.IPEndPoint)listener.LocalEndpoint).Address,((System.Net.IPEndPoint)listener.LocalEndpoint).Port);
 
             //接続要求のチェック，受け入れ
             System.Net.Sockets.TcpClient client = listener.AcceptTcpClient();
-            Console.WriteLine("クライアント({0}:{1})と接続しました。",
+/*            Console.WriteLine("クライアント({0}:{1})と接続しました。",
                 ((System.Net.IPEndPoint)client.Client.RemoteEndPoint).Address,
                 ((System.Net.IPEndPoint)client.Client.RemoteEndPoint).Port);
+*/
             //NetworkStreamを取得
             System.Net.Sockets.NetworkStream ns = client.GetStream();
 
@@ -67,35 +68,12 @@ namespace GCreceiver
                     case "dist:":
                         distFromAndroid = double.Parse(values[1]);
                         break;
+                    case "lean:":
+                     
+                        break;
                     default:
                         break;
                 }
-                Console.WriteLine(values[0]);
-                Console.WriteLine(values[1]);
-
-
-                //thetaFromAndroid = 100;
-                //distFromAndroid = 10;
-                /*
-                //データの一部を受信する
-                resSize = ns.Read(resBytes, 0, resBytes.Length);
-                //Readが0を返した時(ソケットが閉じられている場合)はクライアントが切断したと判断
-                if (resSize == 0)
-                {
-                    disconnected = true;
-                    Console.WriteLine("クライアントが切断しました。");
-                    break;
-                }
-                
-
-
-                //受信したデータを蓄積する
-                ms.Write(resBytes, 0, resSize);
-
-                //まだ読み取れるデータがあるか、データの最後が\nでない時は、
-                // 受信を続ける
-            } while (ns.DataAvailable || resBytes[resSize - 1] != '\n');
-            */
             } while (true);
 
 
@@ -108,11 +86,11 @@ namespace GCreceiver
             ms.Close();
             ns.Close();
             client.Close();
-            Console.WriteLine("クライアントとの接続を閉じました。");
+//            Console.WriteLine("クライアントとの接続を閉じました。");
 
             //リスナを閉じる
             listener.Stop();
-            Console.WriteLine("Listenerを閉じました。");
+//            Console.WriteLine("Listenerを閉じました。");
 
             Console.ReadLine();
             return 1;   //規定文字が来たら，-1などを返すようにあとで変える

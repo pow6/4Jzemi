@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/preference_general">
+
+        <EditTextPreference
+            android:key="key_thetaEncodingRate"
+            android:hint="@string/preference_thetaEncodingRateSummary"
+            android:inputType="number"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/preference_thetaEncodingRate"
+            android:summary="@string/preference_thetaEncodingRateSummary"
+            android:dialogTitle="@string/preference_thetaEncodingRate"
+            android:defaultValue="@string/default_thetaEncodingRate" />
+        <EditTextPreference
+            android:key="key_distEncodingRate"
+            android:hint="@string/preference_distEncodingRateSummary"
+            android:inputType="number"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/preference_distEncodingRate"
+            android:summary="@string/preference_distEncodingRateSummary"
+            android:dialogTitle="@string/preference_distEncodingRate"
+            android:defaultValue="@string/default_distEncodingRate" />
+
+        <EditTextPreference
+            android:key="key_horizontal"
+            android:hint="@string/preference_horizonMaxSummary"
+            android:inputType="number"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/preference_horizonMax"
+            android:summary="@string/preference_horizonMaxSummary"
+            android:dialogTitle="@string/preference_horizonMax"
+            android:defaultValue="@string/default_horizon" />
+        <EditTextPreference
+            android:key="key_vertical"
+            android:hint="@string/preference_verticalMaxSummary"
+            android:inputType="number"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/preference_verticalMax"
+            android:summary="@string/preference_verticalMaxSummary"
+            android:dialogTitle="@string/preference_verticalMax"
+            android:defaultValue="@string/default_vertical" />
+
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/preference_network">
+
+        <EditTextPreference
+            android:key="key_ipAddress"
+            android:hint="@string/preference_ipAddressSummary"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/preference_ipAddress"
+            android:summary="@string/preference_ipAddressSummary"
+            android:dialogTitle="@string/preference_ipAddress"
+            android:defaultValue="@string/default_ipAddress"/>
+        <EditTextPreference
+            android:key="key_portNumber"
+            android:hint="@string/preference_ipAddressSummary"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:inputType="number"
+            android:title="@string/preference_portNumber"
+            android:summary="@string/preference_portNumberSummary"
+            android:dialogTitle="@string/preference_portNumber"
+            android:defaultValue="@string/default_portNumber"/>
+
+
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     public void onClickA(View v){
         String send;
-        send = "***********\n";
+        send = "key: A";
         connect(send);
     }
 

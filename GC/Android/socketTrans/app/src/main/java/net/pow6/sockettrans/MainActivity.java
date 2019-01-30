@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener, SurfaceHolder.Callback , SharedPreferences.OnSharedPreferenceChangeListener,View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements SensorEventListener, SurfaceHolder.Callback , SharedPreferences.OnSharedPreferenceChangeListener,View.OnClickListener {
 
 
     //センサ用
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
     //センサ補正用（手振れ補正のような処理はWPF側で行う）
-    static final double MOVE_CORRECTION=0.3;    //dist がゼロに近い場合，thetaの値が荒ぶるので，その予防 (なお横縦の値はすでに0~1に量子化しているとする)
+    static final double MOVE_CORRECTION = 0.3;    //dist がゼロに近い場合，thetaの値が荒ぶるので，その予防 (なお横縦の値はすでに0~1に量子化しているとする)
     double vertical_offset;
 
     //socket通信用
@@ -64,11 +64,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     boolean leanFlag;           //現在リーンをしているかの判定
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mGyroSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         //Android 端末が 各センサに対応しているかどうかチェックする
         //対応しているセンサをすべて実装する
@@ -94,8 +94,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //}
 
         //センサが対応していない場合の例外処理を入れようと思ったが、めんどいので後回し
-        mSensorManager.registerListener(this,mAccSensor,SensorManager.SENSOR_DELAY_GAME);
-        mSensorManager.registerListener(this,mGyroSensor,SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this, mAccSensor, SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this, mGyroSensor, SensorManager.SENSOR_DELAY_GAME);
 
         //preference から読み取りを行う
         preferenceInitialize();
@@ -103,11 +103,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         leanFlag = false;
     }
 
-    public void onClickA(View v){
-        String send;
-        send = "key: A";
-        connect(send);
-    }
 
     @Override
     public void onClick(View view){
@@ -121,6 +116,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     break;
                 case R.id.button_finish:
                     finish();
+                    break;
+                case R.id.button_a:
+                    connect("key: A");
+                    break;
+                case R.id.button_s:
+                    connect("key: S");
+                    break;
+                case R.id.button_d:
+                    connect("key: D");
+                    break;
+                case R.id.button_w:
+                    connect("key: W");
                     break;
                 default:
                     break;
